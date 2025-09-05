@@ -298,21 +298,21 @@
   animation: bounce 2s ease-in-out infinite;
 }
 
-/* Gentle swimming-like floating animations */
+/* Gentle swimming-like floating animations - Faster */
 .animate-moon-float {
-  animation: moonFloat 8s ease-in-out infinite;
+  animation: moonFloat 4s ease-in-out infinite;
 }
 
 .animate-particle-float {
-  animation: particleFloat 6s ease-in-out infinite;
+  animation: particleFloat 3s ease-in-out infinite;
 }
 
 .animate-slow-float {
-  animation: slowFloat 10s ease-in-out infinite;
+  animation: slowFloat 5s ease-in-out infinite;
 }
 
 .animate-gentle-bounce {
-  animation: gentleBounce 7s ease-in-out infinite;
+  animation: gentleBounce 3.5s ease-in-out infinite;
 }
 
 /* Gentle swimming-like animations */
@@ -341,15 +341,15 @@
 }
 
 .animate-zero-gravity-1 {
-  animation: zeroGravity1 9s ease-in-out infinite;
+  animation: zeroGravity1 4.5s ease-in-out infinite;
 }
 
 .animate-zero-gravity-2 {
-  animation: zeroGravity2 7.5s ease-in-out infinite;
+  animation: zeroGravity2 3.75s ease-in-out infinite;
 }
 
 .animate-zero-gravity-3 {
-  animation: zeroGravity3 11s ease-in-out infinite;
+  animation: zeroGravity3 5.5s ease-in-out infinite;
 }
 
 /* Typewriter effect for rotating words */
@@ -515,12 +515,17 @@
   box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Enhanced Button Styles - Fixed for Mobile */
+/* Enhanced Button Styles - Modern Gradients */
 .btn-primary-enhanced {
-  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
-  @apply hover:shadow-lg hover:shadow-primary/25 transition-all duration-300;
-  @apply hover:scale-102 hover:-translate-y-0.5;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
+  @apply relative overflow-hidden text-white font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  @apply hover:shadow-lg transition-all duration-300;
+  @apply hover:scale-101 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-300;
+}
+
+.btn-primary-enhanced:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
 .dark .btn-primary-enhanced {
@@ -543,12 +548,19 @@
 }
 
 .btn-secondary-enhanced {
-  @apply relative overflow-hidden border-2 border-transparent bg-gradient-to-r from-primary via-accent to-secondary;
-  @apply text-transparent bg-clip-text font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
-  @apply hover:bg-gradient-to-r hover:from-primary hover:via-accent hover:to-secondary;
-  @apply hover:text-white hover:shadow-lg hover:shadow-primary/20;
-  @apply transition-all duration-300 hover:scale-102 hover:-translate-y-0.5;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
+  @apply relative overflow-hidden border-2 font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  color: #667eea;
+  background-clip: padding-box;
+  @apply hover:text-white hover:shadow-lg;
+  @apply transition-all duration-300 hover:scale-101 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-300;
+}
+
+.btn-secondary-enhanced:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
 }
 
 .dark .btn-secondary-enhanced {
@@ -572,11 +584,16 @@
 }
 
 .btn-cta-enhanced {
-  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-xl;
-  @apply hover:shadow-lg hover:shadow-primary/30 transition-all duration-300;
-  @apply hover:scale-105 hover:-translate-y-1;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/40;
+  @apply relative overflow-hidden text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-xl;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 50%, #ff4757 100%);
+  @apply hover:shadow-xl transition-all duration-300;
+  @apply hover:scale-102 hover:-translate-y-1;
+  @apply focus:outline-none focus:ring-2 focus:ring-red-300;
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.btn-cta-enhanced:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #d32f2f 50%, #c62828 100%);
 }
 
 .dark .btn-cta-enhanced {
@@ -599,11 +616,17 @@
 }
 
 .btn-outline-enhanced {
-  @apply relative overflow-hidden border-2 border-primary/30 text-primary font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
-  @apply hover:border-primary hover:bg-primary hover:text-white;
-  @apply hover:shadow-md hover:shadow-primary/20;
-  @apply transition-all duration-300 hover:scale-102 hover:-translate-y-0.5;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
+  @apply relative overflow-hidden border-2 font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
+  border-color: #667eea;
+  color: #667eea;
+  @apply hover:text-white hover:shadow-lg;
+  @apply transition-all duration-300 hover:scale-101 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-300;
+}
+
+.btn-outline-enhanced:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
 }
 
 .dark .btn-outline-enhanced {

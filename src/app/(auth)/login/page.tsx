@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,6 +22,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
     
     try {
       const { simpleSignIn } = await import('@/lib/auth/simple-auth')
@@ -30,11 +32,11 @@ export default function LoginPage() {
         // Success - redirect to dashboard
         window.location.href = '/dashboard'
       } else {
-        alert(result.error || 'Login failed')
+        setError(result.error || 'Login failed')
       }
     } catch (error) {
       console.error('Login error:', error)
-      alert('Authentication service error. Please check your internet connection and try again.')
+      setError('Authentication service error. Please check your internet connection and try again.')
     } finally {
       setIsLoading(false)
     }
@@ -46,11 +48,11 @@ export default function LoginPage() {
       const result = await signInWithOAuth(provider)
       
       if (result.error) {
-        alert(result.error)
+        setError(result.error)
       }
     } catch (error) {
       console.error('Social login error:', error)
-      alert('An unexpected error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.')
     }
   }
 
@@ -65,6 +67,13 @@ export default function LoginPage() {
         </CardHeader>
         
         <CardContent className="space-y-6">
+          {/* Error Display */}
+          {error && (
+            <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
           {/* Social Login Buttons */}
           <div className="space-y-3">
             <Button
