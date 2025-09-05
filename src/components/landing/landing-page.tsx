@@ -214,6 +214,12 @@ export function SocialFlowLandingPage() {
             >
               Testimonials
             </Link>
+            <Link
+              href="#contact"
+              className="text-foreground/60 transition-colors hover:text-foreground/80 scroll-smooth"
+            >
+              Contact
+            </Link>
           </nav>
 
           <div className="flex flex-1 items-center justify-end space-x-2">
@@ -295,6 +301,13 @@ export function SocialFlowLandingPage() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Testimonials
+              </Link>
+              <Link
+                href="#contact"
+                className="block text-foreground/60 transition-colors hover:text-foreground/80 scroll-smooth"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact
               </Link>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
                 <Button variant="ghost" className="btn-outline-enhanced" asChild>
@@ -1462,6 +1475,326 @@ export function SocialFlowLandingPage() {
                   </Card>
                 </motion.div>
               </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Contact & Support Section */}
+        <section id="contact" className="border-t">
+          <div className="container mx-auto py-8 md:py-12 lg:py-24 px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="max-w-6xl mx-auto"
+            >
+              {/* Contact Header */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="text-center max-w-3xl mx-auto mb-16"
+              >
+                <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl mb-4">
+                  Get in Touch with 
+                  <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent"> SocialFlow</span>
+                </h2>
+                <p className="text-lg text-muted-foreground mb-6">
+                  Have questions? Need support? Want to discuss enterprise solutions? 
+                  We're here to help you succeed with your social media management.
+                </p>
+                <Badge variant="outline" className="mb-4">
+                  <Phone className="mr-2 h-3 w-3" />
+                  24/7 WhatsApp Support Available
+                </Badge>
+              </motion.div>
+
+              {/* Contact Info Cards */}
+              <motion.div
+                variants={staggerContainer}
+                className="grid md:grid-cols-3 gap-6 mb-16"
+              >
+                <motion.div variants={fadeUpVariants}>
+                  <Card className="text-center hover-lift h-full">
+                    <CardHeader>
+                      <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <MessageCircle className="h-8 w-8 text-green-600" />
+                      </div>
+                      <CardTitle>WhatsApp Support</CardTitle>
+                      <CardDescription>Get instant help via WhatsApp</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <a 
+                        href="https://wa.me/201023516495" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary hover:text-primary/80 font-semibold text-lg"
+                      >
+                        +20 102 351 6495
+                      </a>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Emergency support available 24/7
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                <motion.div variants={fadeUpVariants}>
+                  <Card className="text-center hover-lift h-full">
+                    <CardHeader>
+                      <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Clock className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <CardTitle>24/7 Availability</CardTitle>
+                      <CardDescription>We're always here to help</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-medium">Round-the-clock Support</div>
+                        <div className="text-muted-foreground">Monday - Sunday</div>
+                        <div className="text-muted-foreground">All time zones covered</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                <motion.div variants={fadeUpVariants}>
+                  <Card className="text-center hover-lift h-full">
+                    <CardHeader>
+                      <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Globe className="h-8 w-8 text-purple-600" />
+                      </div>
+                      <CardTitle>Global Reach</CardTitle>
+                      <CardDescription>Serving clients worldwide</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2 text-sm">
+                        <div className="font-medium">Based in Egypt</div>
+                        <div className="text-muted-foreground">Serving globally</div>
+                        <div className="text-muted-foreground">Multilingual support</div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </motion.div>
+
+              {/* Main Contact Form */}
+              <div className="grid lg:grid-cols-2 gap-12 items-start">
+                {/* Left side - Contact reasons */}
+                <motion.div variants={fadeUpVariants} className="space-y-6">
+                  <h3 className="text-2xl font-bold mb-6">How Can We Help You?</h3>
+                  
+                  <div className="space-y-4">
+                    {[
+                      {
+                        icon: Users,
+                        title: "General Support",
+                        description: "Questions about features, account setup, or getting started"
+                      },
+                      {
+                        icon: Shield,
+                        title: "Enterprise Solutions", 
+                        description: "Custom solutions, enterprise features, and dedicated support"
+                      },
+                      {
+                        icon: MessageSquare,
+                        title: "Technical Help",
+                        description: "Bug reports, technical issues, or platform troubleshooting"
+                      },
+                      {
+                        icon: TrendingUp,
+                        title: "Partnership Opportunities",
+                        description: "Collaboration, integration partnerships, or business development"
+                      }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                            <item.icon className="h-5 w-5 text-primary" />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-1">{item.title}</h4>
+                          <p className="text-sm text-muted-foreground">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Quick WhatsApp Link */}
+                  <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-lg p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <MessageCircle className="h-6 w-6 text-green-600" />
+                      <h4 className="font-semibold text-green-800 dark:text-green-200">Need Immediate Help?</h4>
+                    </div>
+                    <p className="text-green-700 dark:text-green-300 text-sm mb-4">
+                      Skip the form and message us directly on WhatsApp for instant support.
+                    </p>
+                    <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
+                      <a 
+                        href="https://wa.me/201023516495" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Message on WhatsApp
+                      </a>
+                    </Button>
+                  </div>
+                </motion.div>
+
+                {/* Right side - Contact Form */}
+                <motion.div variants={fadeUpVariants}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Send className="h-5 w-5" />
+                        Send us a Message
+                      </CardTitle>
+                      <CardDescription>
+                        Fill out the form below and we'll contact you via WhatsApp within 24 hours.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <form onSubmit={handleEnterpriseSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="contact-name" className="text-sm font-medium">Name *</Label>
+                            <Input
+                              id="contact-name"
+                              name="name"
+                              value={enterpriseForm.name}
+                              onChange={handleEnterpriseInputChange}
+                              required
+                              placeholder="Your full name"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="contact-email" className="text-sm font-medium">Email *</Label>
+                            <Input
+                              id="contact-email"
+                              name="email"
+                              type="email"
+                              value={enterpriseForm.email}
+                              onChange={handleEnterpriseInputChange}
+                              required
+                              placeholder="your@email.com"
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="contact-company" className="text-sm font-medium">Company / Organization</Label>
+                          <Input
+                            id="contact-company"
+                            name="company"
+                            value={enterpriseForm.company}
+                            onChange={handleEnterpriseInputChange}
+                            placeholder="Your company name (optional)"
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="contact-type" className="text-sm font-medium">How can we help you?</Label>
+                          <Select onValueChange={handleEnterpriseSelectChange} value={enterpriseForm.contactType}>
+                            <SelectTrigger className="mt-1">
+                              <SelectValue placeholder="Select the type of inquiry" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="support">General Support</SelectItem>
+                              <SelectItem value="enterprise">Enterprise Solutions</SelectItem>
+                              <SelectItem value="technical">Technical Help</SelectItem>
+                              <SelectItem value="partnership">Partnership</SelectItem>
+                              <SelectItem value="demo">Product Demo</SelectItem>
+                              <SelectItem value="billing">Billing Question</SelectItem>
+                              <SelectItem value="feedback">Feedback & Suggestions</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="contact-message" className="text-sm font-medium">Message *</Label>
+                          <Textarea
+                            id="contact-message"
+                            name="message"
+                            value={enterpriseForm.message}
+                            onChange={handleEnterpriseInputChange}
+                            required
+                            placeholder="Tell us about your needs, questions, or how we can help you..."
+                            rows={5}
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <Button 
+                          type="submit" 
+                          className="w-full btn-cta-enhanced"
+                          disabled={isSubmittingEnterprise}
+                        >
+                          {isSubmittingEnterprise ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Sending Message...
+                            </>
+                          ) : (
+                            <>
+                              <Send className="h-4 w-4 mr-2" />
+                              Send Message via WhatsApp
+                            </>
+                          )}
+                        </Button>
+
+                        <p className="text-xs text-muted-foreground text-center">
+                          🔒 Your information is secure and will never be shared. We'll contact you via WhatsApp within 24 hours.
+                        </p>
+                      </form>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+
+              {/* Contact Features */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="mt-16 text-center"
+              >
+                <h3 className="text-2xl font-bold mb-8">Why Choose SocialFlow Support?</h3>
+                <div className="grid sm:grid-cols-4 gap-6">
+                  {[
+                    {
+                      icon: Clock,
+                      title: "24/7 Availability",
+                      description: "Round-the-clock support whenever you need help"
+                    },
+                    {
+                      icon: MessageCircle,
+                      title: "Instant Response",
+                      description: "Quick replies via WhatsApp for urgent matters"
+                    },
+                    {
+                      icon: Phone,
+                      title: "Personal Touch",
+                      description: "Direct communication with our expert team"
+                    },
+                    {
+                      icon: Shield,
+                      title: "Secure & Private",
+                      description: "Your data and conversations are always protected"
+                    }
+                  ].map((feature, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <feature.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <h4 className="font-semibold mb-2">{feature.title}</h4>
+                      <p className="text-sm text-muted-foreground">{feature.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </section>
