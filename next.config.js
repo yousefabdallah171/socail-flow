@@ -40,12 +40,12 @@ const nextConfig = {
     ]
   },
   
-  // TypeScript - allow builds with errors for now
+  // TypeScript - Temporarily allow build errors for deployment
   typescript: {
     ignoreBuildErrors: true,
   },
   
-  // ESLint - allow builds with lint errors for now
+  // ESLint - Temporarily allow lint errors for deployment  
   eslint: {
     ignoreDuringBuilds: true,
   },

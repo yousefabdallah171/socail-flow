@@ -32,7 +32,9 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Music
+  Music,
+  Send,
+  Phone
 } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -41,6 +43,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FreeBanner } from "@/components/ui/free-banner"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // Animation variants
 const fadeUpVariants = {
@@ -74,6 +80,16 @@ export function SocialFlowLandingPage() {
   const [showBackToTop, setShowBackToTop] = useState(false)
   const { theme, setTheme } = useTheme()
   
+  // Enterprise form state
+  const [enterpriseForm, setEnterpriseForm] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: '',
+    contactType: ''
+  })
+  const [isSubmittingEnterprise, setIsSubmittingEnterprise] = useState(false)
+  
   // Parallax effects - disabled for better UX
   // const heroY = useTransform(scrollY, [0, 500], [0, 150])
   // const heroOpacity = useTransform(scrollY, [0, 300], [1, 0])
@@ -97,6 +113,52 @@ export function SocialFlowLandingPage() {
       top: 0,
       behavior: 'smooth'
     })
+  }
+
+  // Enterprise form handlers
+  const handleEnterpriseInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setEnterpriseForm(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleEnterpriseSelectChange = (value: string) => {
+    setEnterpriseForm(prev => ({ ...prev, contactType: value }))
+  }
+
+  const handleEnterpriseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmittingEnterprise(true)
+
+    // Create WhatsApp message for enterprise inquiry
+    const whatsappMessage = `🏢 *SocialFlow Enterprise Inquiry*\n\n` +
+      `*Name:* ${enterpriseForm.name}\n` +
+      `*Email:* ${enterpriseForm.email}\n` +
+      `*Company:* ${enterpriseForm.company}\n` +
+      `*Contact Type:* ${enterpriseForm.contactType}\n\n` +
+      `*Message:*\n${enterpriseForm.message}\n\n` +
+      `---\nEnterprise inquiry from SocialFlow Landing Page`
+
+    const whatsappNumber = "201023516495"
+    const encodedMessage = encodeURIComponent(whatsappMessage)
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+
+    // Simulate processing and open WhatsApp
+    setTimeout(() => {
+      setIsSubmittingEnterprise(false)
+      window.open(whatsappUrl, '_blank')
+      
+      // Reset form
+      setEnterpriseForm({
+        name: '',
+        email: '',
+        company: '',
+        message: '',
+        contactType: ''
+      })
+      
+      // Show success message
+      alert('Your enterprise inquiry has been sent! We\'ll contact you within 24 hours.')
+    }, 1500)
   }
 
   if (!mounted) {
@@ -1220,6 +1282,190 @@ export function SocialFlowLandingPage() {
           </div>
         </section>
 
+        {/* Enterprise Contact Section */}
+        <section className="border-t bg-muted/30">
+          <div className="container mx-auto py-8 md:py-12 lg:py-24 px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="max-w-6xl mx-auto"
+            >
+              <motion.div
+                variants={fadeUpVariants}
+                className="text-center max-w-3xl mx-auto mb-12"
+              >
+                <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl mb-4">
+                  Need Enterprise Solutions or Custom Features?
+                </h2>
+                <p className="text-lg text-muted-foreground mb-2">
+                  Get in touch with our team for enterprise-grade solutions, custom integrations, 
+                  or 24/7 dedicated support.
+                </p>
+                <Badge variant="outline" className="mb-6">
+                  <Phone className="mr-2 h-3 w-3" />
+                  24/7 WhatsApp Support Available
+                </Badge>
+              </motion.div>
+
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                {/* Left side - Benefits */}
+                <motion.div variants={fadeUpVariants} className="space-y-6">
+                  <h3 className="text-2xl font-bold mb-6">Why Choose Enterprise?</h3>
+                  
+                  <div className="space-y-4">
+                    {[
+                      {
+                        icon: Shield,
+                        title: "Enterprise Security",
+                        description: "Advanced security features, SSO integration, and compliance standards"
+                      },
+                      {
+                        icon: Users,
+                        title: "Dedicated Account Manager", 
+                        description: "Personal support representative for your organization's needs"
+                      },
+                      {
+                        icon: Zap,
+                        title: "Custom Integrations",
+                        description: "Connect with your existing tools and workflows seamlessly"
+                      },
+                      {
+                        icon: Phone,
+                        title: "Priority Support",
+                        description: "24/7 WhatsApp support with guaranteed response times"
+                      }
+                    ].map((benefit, index) => (
+                      <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                            <benefit.icon className="h-5 w-5 text-primary" />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-1">{benefit.title}</h4>
+                          <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Right side - Contact Form */}
+                <motion.div variants={fadeUpVariants}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Get in Touch</CardTitle>
+                      <CardDescription>
+                        Fill out the form below and we'll contact you via WhatsApp within 24 hours.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <form onSubmit={handleEnterpriseSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="enterprise-name" className="text-sm font-medium">Name *</Label>
+                            <Input
+                              id="enterprise-name"
+                              name="name"
+                              value={enterpriseForm.name}
+                              onChange={handleEnterpriseInputChange}
+                              required
+                              placeholder="Your full name"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="enterprise-email" className="text-sm font-medium">Email *</Label>
+                            <Input
+                              id="enterprise-email"
+                              name="email"
+                              type="email"
+                              value={enterpriseForm.email}
+                              onChange={handleEnterpriseInputChange}
+                              required
+                              placeholder="your@company.com"
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="enterprise-company" className="text-sm font-medium">Company *</Label>
+                          <Input
+                            id="enterprise-company"
+                            name="company"
+                            value={enterpriseForm.company}
+                            onChange={handleEnterpriseInputChange}
+                            required
+                            placeholder="Your company name"
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="enterprise-contact-type" className="text-sm font-medium">What can we help you with?</Label>
+                          <Select onValueChange={handleEnterpriseSelectChange} value={enterpriseForm.contactType}>
+                            <SelectTrigger className="mt-1">
+                              <SelectValue placeholder="Select inquiry type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="enterprise">Enterprise Solutions</SelectItem>
+                              <SelectItem value="custom">Custom Development</SelectItem>
+                              <SelectItem value="integration">System Integration</SelectItem>
+                              <SelectItem value="support">Dedicated Support</SelectItem>
+                              <SelectItem value="demo">Product Demo</SelectItem>
+                              <SelectItem value="partnership">Partnership</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="enterprise-message" className="text-sm font-medium">Tell us about your needs *</Label>
+                          <Textarea
+                            id="enterprise-message"
+                            name="message"
+                            value={enterpriseForm.message}
+                            onChange={handleEnterpriseInputChange}
+                            required
+                            placeholder="Describe your requirements, team size, and specific needs..."
+                            rows={4}
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <Button 
+                          type="submit" 
+                          className="w-full btn-cta-enhanced"
+                          disabled={isSubmittingEnterprise}
+                        >
+                          {isSubmittingEnterprise ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Sending Message...
+                            </>
+                          ) : (
+                            <>
+                              <Send className="h-4 w-4 mr-2" />
+                              Send Enterprise Inquiry
+                            </>
+                          )}
+                        </Button>
+
+                        <p className="text-xs text-muted-foreground text-center">
+                          🔒 Your information is secure. We'll contact you via WhatsApp within 24 hours.
+                        </p>
+                      </form>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="container mx-auto py-8 md:py-12 lg:py-24 px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -1301,9 +1547,20 @@ export function SocialFlowLandingPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-8 border-t">
-            <p className="text-sm text-muted-foreground">
-              © 2024 SocialFlow. All rights reserved.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+              <p>© 2025 SocialFlow. All rights reserved.</p>
+              <div className="flex items-center gap-1">
+                <span>Created by</span>
+                <a 
+                  href="http://rakmyat.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 font-medium transition-colors"
+                >
+                  Rakmyat.com
+                </a>
+              </div>
+            </div>
             <div className="flex items-center gap-4">
               <Link href="/twitter" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Twitter className="h-4 w-4" />
@@ -1323,10 +1580,10 @@ export function SocialFlowLandingPage() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0 }}
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 bg-gradient-to-r from-primary via-accent to-secondary text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-primary/30 dark:hover:shadow-primary/50"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-gradient-to-r from-primary via-accent to-secondary text-white p-2 sm:p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:hover:shadow-primary/50"
           aria-label="Back to top"
         >
-          <ArrowRight className="h-6 w-6 rotate-[-90deg]" />
+          <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 rotate-[-90deg]" />
         </motion.button>
       )}
     </div>

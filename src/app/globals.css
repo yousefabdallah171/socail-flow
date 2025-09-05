@@ -515,12 +515,12 @@
   box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Enhanced Button Styles */
+/* Enhanced Button Styles - Fixed for Mobile */
 .btn-primary-enhanced {
-  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-semibold px-8 py-4 rounded-xl;
-  @apply hover:shadow-2xl hover:shadow-primary/25 transition-all duration-300;
-  @apply hover:scale-105 hover:-translate-y-1;
-  @apply focus:outline-none focus:ring-4 focus:ring-primary/30;
+  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
+  @apply hover:shadow-lg hover:shadow-primary/25 transition-all duration-300;
+  @apply hover:scale-102 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
 }
 
 .dark .btn-primary-enhanced {
@@ -544,11 +544,11 @@
 
 .btn-secondary-enhanced {
   @apply relative overflow-hidden border-2 border-transparent bg-gradient-to-r from-primary via-accent to-secondary;
-  @apply text-transparent bg-clip-text font-semibold px-8 py-4 rounded-xl;
+  @apply text-transparent bg-clip-text font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
   @apply hover:bg-gradient-to-r hover:from-primary hover:via-accent hover:to-secondary;
-  @apply hover:text-white hover:shadow-xl hover:shadow-primary/20;
-  @apply transition-all duration-300 hover:scale-105 hover:-translate-y-1;
-  @apply focus:outline-none focus:ring-4 focus:ring-primary/30;
+  @apply hover:text-white hover:shadow-lg hover:shadow-primary/20;
+  @apply transition-all duration-300 hover:scale-102 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
 }
 
 .dark .btn-secondary-enhanced {
@@ -572,11 +572,11 @@
 }
 
 .btn-cta-enhanced {
-  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-bold px-10 py-5 rounded-2xl;
-  @apply hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300;
-  @apply hover:scale-110 hover:-translate-y-2;
-  @apply focus:outline-none focus:ring-4 focus:ring-primary/40;
-  animation: pulse-glow 2s ease-in-out infinite;
+  @apply relative overflow-hidden bg-gradient-to-r from-primary via-accent to-secondary text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 rounded-xl;
+  @apply hover:shadow-lg hover:shadow-primary/30 transition-all duration-300;
+  @apply hover:scale-105 hover:-translate-y-1;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/40;
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 .dark .btn-cta-enhanced {
@@ -599,11 +599,11 @@
 }
 
 .btn-outline-enhanced {
-  @apply relative overflow-hidden border-2 border-primary/30 text-primary font-semibold px-8 py-4 rounded-xl;
+  @apply relative overflow-hidden border-2 border-primary/30 text-primary font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg;
   @apply hover:border-primary hover:bg-primary hover:text-white;
-  @apply hover:shadow-lg hover:shadow-primary/20;
-  @apply transition-all duration-300 hover:scale-105 hover:-translate-y-1;
-  @apply focus:outline-none focus:ring-4 focus:ring-primary/30;
+  @apply hover:shadow-md hover:shadow-primary/20;
+  @apply transition-all duration-300 hover:scale-102 hover:-translate-y-0.5;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/30;
 }
 
 .dark .btn-outline-enhanced {
