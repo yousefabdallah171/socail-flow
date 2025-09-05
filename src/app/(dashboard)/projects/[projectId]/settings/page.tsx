@@ -16,6 +16,8 @@ import { toast } from 'sonner'
 import { useProjects } from '@/components/dashboard/project-provider'
 import type { Project, SocialAccount } from '@/lib/projects/api'
 import { Facebook, Instagram, Twitter, Linkedin, Youtube, TrendingUp } from 'lucide-react'
+import { CredentialsManager } from '@/components/credentials/credentials-manager'
+import { N8NManager } from '@/components/credentials/n8n-manager'
 
 const platformIcons = {
   facebook: Facebook,
@@ -229,10 +231,12 @@ export default function ProjectSettingsPage() {
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="brand">Brand & Content</TabsTrigger>
           <TabsTrigger value="social">Social Accounts</TabsTrigger>
+          <TabsTrigger value="credentials">Credentials</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
         </TabsList>
 
         {/* General Settings */}
@@ -515,6 +519,23 @@ export default function ProjectSettingsPage() {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        {/* Credentials Management */}
+        <TabsContent value="credentials">
+          <CredentialsManager 
+            project_id={projectId} 
+            social_accounts={socialAccounts.map(account => ({
+              id: account.id,
+              platform: account.platform,
+              account_name: account.account_name || `${account.platform} Account`
+            }))}
+          />
+        </TabsContent>
+
+        {/* N8N Automation */}
+        <TabsContent value="automation">
+          <N8NManager project_id={projectId} />
         </TabsContent>
       </Tabs>
     </div>

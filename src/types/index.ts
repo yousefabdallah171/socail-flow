@@ -241,7 +241,8 @@ export type Database = {
 // Enums
 export type UserRole = 'owner' | 'admin' | 'editor' | 'member' | 'viewer'
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'failed' | 'archived'
-export type SocialPlatform = 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'tiktok' | 'youtube'
+export type SocialPlatform = 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'tiktok' | 'youtube' | 'pinterest'
+export type AutomationType = 'content_creation' | 'posting' | 'analytics' | 'monitoring'
 
 // Utility types
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
@@ -577,4 +578,80 @@ export interface LinkedInPageInfo {
   id: string
   name: string
   localizedName: string
+}
+
+// Social Media Credentials types
+export interface SocialMediaCredential {
+  id: string
+  project_id: string
+  social_account_id: string
+  platform: SocialPlatform
+  account_name: string
+  is_active: boolean
+  is_verified: boolean
+  last_verified_at?: string
+  verification_error?: string
+  last_used_at?: string
+  usage_count: number
+  rate_limit_remaining?: number
+  rate_limit_reset_at?: string
+  expires_at?: string
+  rotation_scheduled_at?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CredentialForm {
+  project_id: string
+  social_account_id: string
+  platform: SocialPlatform
+  account_name: string
+  credentials: {
+    api_key?: string
+    api_secret?: string
+    access_token?: string
+    refresh_token?: string
+    app_id?: string
+    client_id?: string
+    client_secret?: string
+    webhook_secret?: string
+    page_token?: string
+    business_account_id?: string
+  }
+  expires_at?: string
+}
+
+export interface N8NWebhookConfig {
+  id: string
+  project_id: string
+  webhook_url: string
+  webhook_secret: string
+  n8n_workflow_id?: string
+  automation_type: AutomationType
+  is_active: boolean
+  trigger_events: string[]
+  platform_filters?: string[]
+  last_triggered_at?: string
+  trigger_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface N8NWebhookForm {
+  project_id: string
+  webhook_url: string
+  webhook_secret: string
+  n8n_workflow_id?: string
+  automation_type: AutomationType
+  trigger_events: string[]
+  platform_filters?: string[]
+}
+
+export interface PlatformCredentialField {
+  name: keyof CredentialForm['credentials']
+  label: string
+  type: 'text' | 'password' | 'url'
+  placeholder: string
+  required: boolean
+  description?: string
 }
