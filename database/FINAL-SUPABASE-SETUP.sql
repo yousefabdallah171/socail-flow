@@ -188,7 +188,6 @@ CREATE TABLE generated_content (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-
 -- Content publishing schedule
 CREATE TABLE content_schedule (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
