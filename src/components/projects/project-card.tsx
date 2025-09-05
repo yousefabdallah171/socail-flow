@@ -29,10 +29,10 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
-import { ProjectData } from '@/lib/projects/project-actions'
+import { Project } from '@/lib/projects/api'
 
 interface ProjectCardProps {
-  project: ProjectData
+  project: Project
   viewMode: 'grid' | 'list'
   onEdit: () => void
   onToggleStatus: () => void
@@ -360,12 +360,10 @@ export function ProjectCard({
               <Share2 className="h-3 w-3" />
               <span>{project.social_accounts_count || 0}</span>
             </div>
-            {project.team_members_count && project.team_members_count > 0 && (
-              <div className="flex items-center space-x-1">
-                <Users className="h-3 w-3" />
-                <span>{project.team_members_count}</span>
-              </div>
-            )}
+            <div className="flex items-center space-x-1">
+              <Users className="h-3 w-3" />
+              <span>{project.total_followers || 0}</span>
+            </div>
           </div>
           
           <div className="text-xs">
