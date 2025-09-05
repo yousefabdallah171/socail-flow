@@ -70,83 +70,74 @@ interface DashboardProviderProps {
 export function DashboardProvider({ initialUser, children }: DashboardProviderProps) {
   const [user] = useState<User>(initialUser)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [loading, setLoading] = useState(true)
   
-  // Mock data - replace with real API calls
-  const [organizations] = useState<Organization[]>([
-    {
-      id: '1',
-      name: 'Acme Marketing Agency',
-      slug: 'acme-marketing',
-      logo_url: '',
-      role: 'owner',
-      is_default: true,
-      subscription_tier: 'free',
-      projects_count: 5,
-      team_members_count: 3,
-      created_at: new Date().toISOString()
-    },
-    {
-      id: '2',
-      name: 'Creative Studio Inc',
-      slug: 'creative-studio',
-      role: 'admin',
-      is_default: false,
-      subscription_tier: 'pro',
-      projects_count: 8,
-      team_members_count: 12,
-      created_at: new Date().toISOString()
+  // Real data from database
+  const [organizations, setOrganizations] = useState<Organization[]>([])
+  const [activeProjects, setActiveProjects] = useState<Project[]>([])
+  const [currentOrganization, setCurrentOrganization] = useState<Organization | undefined>()
+  const [currentProjectId, setCurrentProjectId] = useState<string | undefined>()
+
+  // Load data on mount
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        setLoading(true)
+        
+        // Import the queries dynamically to avoid server/client issues
+        const { getUserOrganizations, getUserProjects } = await import('@/lib/dashboard/queries')
+        
+        // Load organizations
+        const orgs = await getUserOrganizations()
+        setOrganizations(orgs)
+        
+        // Set current organization (first one for now)
+        const currentOrg = orgs.find(org => org.is_default) || orgs[0]
+        if (currentOrg) {
+          setCurrentOrganization(currentOrg)
+          
+          // Load projects for current organization
+          const projects = await getUserProjects(currentOrg.id)
+          setActiveProjects(projects)
+          
+          // Set current project (first active one)
+          const activeProject = projects.find(p => p.status === 'active')
+          if (activeProject) {
+            setCurrentProjectId(activeProject.id)
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error loading dashboard data:', error)
+        // Fallback to empty arrays
+        setOrganizations([])
+        setActiveProjects([])
+      } finally {
+        setLoading(false)
+      }
     }
-  ])
-  
-  const [currentOrganization, setCurrentOrganization] = useState<Organization>(
-    organizations.find(org => org.is_default) || organizations[0]
-  )
-  
-  const [activeProjects, setActiveProjects] = useState<Project[]>([
-    {
-      id: '1',
-      name: 'Nike Summer Campaign',
-      slug: 'nike-summer-campaign',
-      industry: 'Fashion & Apparel',
-      status: 'active',
-      unread_notifications: 2,
-      last_activity: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      content_count: 24,
-      social_accounts_count: 4,
-      team_members_count: 3
-    },
-    {
-      id: '2',
-      name: 'Tesla Model Y Launch',
-      slug: 'tesla-model-y',
-      industry: 'Automotive',
-      status: 'active',
-      last_activity: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-      content_count: 12,
-      social_accounts_count: 3,
-      team_members_count: 2
-    },
-    {
-      id: '3',
-      name: 'Starbucks Holiday Menu',
-      slug: 'starbucks-holiday',
-      industry: 'Food & Beverage',
-      status: 'paused',
-      last_activity: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      content_count: 8,
-      social_accounts_count: 2,
-      team_members_count: 1
-    }
-  ])
-  
-  const [currentProjectId, setCurrentProjectId] = useState<string>('1')
+
+    loadDashboardData()
+  }, [])
 
   const switchOrganization = async (orgId: string) => {
     const org = organizations.find(o => o.id === orgId)
     if (org) {
       setCurrentOrganization(org)
-      // In real app, fetch projects for this organization
-      console.log('Switched to organization:', org.name)
+      
+      try {
+        // Load projects for the new organization
+        const { getUserProjects } = await import('@/lib/dashboard/queries')
+        const projects = await getUserProjects(orgId)
+        setActiveProjects(projects)
+        
+        // Set current project to first active one
+        const activeProject = projects.find(p => p.status === 'active')
+        setCurrentProjectId(activeProject?.id)
+        
+        console.log('✅ Switched to organization:', org.name)
+      } catch (error) {
+        console.error('❌ Error loading projects for organization:', error)
+      }
     }
   }
 
@@ -195,27 +186,7 @@ export function DashboardProvider({ initialUser, children }: DashboardProviderPr
 
   return (
     <DashboardContext.Provider value={contextValue}>
-      <div className="flex h-screen bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <DashboardHeaderEnhanced
-            user={user}
-            currentOrganization={currentOrganization}
-            organizations={organizations}
-            activeProjects={activeProjects}
-            currentProjectId={currentProjectId}
-            onOrganizationChange={switchOrganization}
-            onProjectSwitch={switchProject}
-            onProjectClose={closeProject}
-            onAddProject={addProject}
-            onCreateOrganization={createOrganization}
-            onMobileMenuToggle={toggleSidebar}
-          />
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
-      </div>
+      {children}
     </DashboardContext.Provider>
   )
 }

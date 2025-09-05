@@ -9,65 +9,22 @@ import { Separator } from '@/components/ui/separator'
 import { OrganizationSwitcher } from './organization-switcher'
 import { ProjectTabs } from './project-tabs'
 import { UserMenu } from './user-menu'
+import { useDashboard } from './dashboard-provider'
 
-interface Organization {
-  id: string
-  name: string
-  slug: string
-  logo_url?: string
-  role: 'owner' | 'admin' | 'editor' | 'member'
-  is_default: boolean
-  subscription_tier: 'free' | 'pro' | 'enterprise'
-  projects_count?: number
-  team_members_count?: number
-  created_at: string
-}
-
-interface Project {
-  id: string
-  name: string
-  slug: string
-  industry?: string
-  status: 'active' | 'paused' | 'completed' | 'archived'
-  unread_notifications?: number
-  last_activity?: string
-  team_members_count?: number
-  content_count?: number
-  social_accounts_count?: number
-}
-
-interface DashboardHeaderEnhancedProps {
-  user: {
-    id: string
-    name: string
-    email: string
-    avatar_url?: string | null
-  }
-  currentOrganization?: Organization
-  organizations: Organization[]
-  activeProjects: Project[]
-  currentProjectId?: string
-  onOrganizationChange: (orgId: string) => void
-  onProjectSwitch: (projectId: string) => void
-  onProjectClose: (projectId: string) => void
-  onAddProject: () => void
-  onCreateOrganization: () => void
-  onMobileMenuToggle: () => void
-}
-
-export function DashboardHeaderEnhanced({
-  user,
-  currentOrganization,
-  organizations,
-  activeProjects,
-  currentProjectId,
-  onOrganizationChange,
-  onProjectSwitch,
-  onProjectClose,
-  onAddProject,
-  onCreateOrganization,
-  onMobileMenuToggle
-}: DashboardHeaderEnhancedProps) {
+export function DashboardHeaderEnhanced() {
+  const {
+    user,
+    currentOrganization,
+    organizations,
+    activeProjects,
+    currentProjectId,
+    switchOrganization,
+    switchProject,
+    closeProject,
+    addProject,
+    createOrganization,
+    toggleSidebar
+  } = useDashboard()
   const [searchQuery, setSearchQuery] = useState('')
   const [unreadNotifications] = useState(3)
 
@@ -83,7 +40,7 @@ export function DashboardHeaderEnhanced({
               variant="ghost"
               size="icon"
               className="lg:hidden"
-              onClick={onMobileMenuToggle}
+              onClick={toggleSidebar}
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -107,8 +64,8 @@ export function DashboardHeaderEnhanced({
                 <OrganizationSwitcher
                   organizations={organizations}
                   currentOrgId={currentOrganization?.id}
-                  onOrganizationChange={onOrganizationChange}
-                  onCreateOrganization={onCreateOrganization}
+                  onOrganizationChange={switchOrganization}
+                  onCreateOrganization={createOrganization}
                 />
               </div>
             </div>
@@ -134,7 +91,7 @@ export function DashboardHeaderEnhanced({
               variant="outline"
               size="sm"
               className="hidden sm:flex"
-              onClick={onAddProject}
+              onClick={addProject}
             >
               <Plus className="h-4 w-4 mr-2" />
               New Project
@@ -145,7 +102,7 @@ export function DashboardHeaderEnhanced({
               variant="outline"
               size="icon"
               className="sm:hidden"
-              onClick={onAddProject}
+              onClick={addProject}
             >
               <Plus className="h-4 w-4" />
             </Button>
@@ -172,8 +129,8 @@ export function DashboardHeaderEnhanced({
             <OrganizationSwitcher
               organizations={organizations}
               currentOrgId={currentOrganization?.id}
-              onOrganizationChange={onOrganizationChange}
-              onCreateOrganization={onCreateOrganization}
+              onOrganizationChange={switchOrganization}
+              onCreateOrganization={createOrganization}
               className="w-full"
             />
           </div>
@@ -227,9 +184,9 @@ export function DashboardHeaderEnhanced({
                 projects={activeProjects}
                 currentProjectId={currentProjectId}
                 organizationId={currentOrganization?.id || ''}
-                onProjectSwitch={onProjectSwitch}
-                onProjectClose={onProjectClose}
-                onAddProject={onAddProject}
+                onProjectSwitch={switchProject}
+                onProjectClose={closeProject}
+                onAddProject={addProject}
                 className="flex-1 min-w-0"
               />
             </div>
