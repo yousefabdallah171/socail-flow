@@ -7,27 +7,23 @@ import { revalidatePath } from 'next/cache'
 // !!!!! DEVELOPMENT AUTHENTICATION SYSTEM !!!!!
 // !!!!! THIS IS SIMPLIFIED FOR DEV TESTING - REPLACE WITH PRODUCTION AUTH IN PROD !!!!!
 
-// Sign up with email and password
+// Sign up with email and password (simplified for project-centric approach)
 export async function signUp(formData: {
   email: string
   password: string
   firstName: string
   lastName: string
-  organizationName: string
-  organizationType: string
-  teamSize: string
 }) {
   const supabase = createClient()
 
   console.log('🚀 DEV: Starting registration process for:', formData.email)
 
-  // !!!!! DEV: Disable email confirmation completely for easy testing !!!!!
-  // !!!!! PRODUCTION: Remove emailRedirectTo or set to proper confirmation URL !!!!!
+  // Create auth user with metadata
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: formData.email,
     password: formData.password,
     options: {
-      emailRedirectTo: undefined, // !!!!! DEV: No email confirmation needed !!!!!
+      emailRedirectTo: undefined, // DEV: No email confirmation needed
       data: {
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -43,58 +39,15 @@ export async function signUp(formData: {
 
   console.log('✅ DEV: Auth user created:', authData.user?.id)
 
-  // !!!!! DEV: Skip email confirmation check - always proceed to create organization !!!!!
-  // !!!!! PRODUCTION: Check if user needs email confirmation first !!!!!
+  // The user profile will be created automatically by the database trigger
+  // No need to create organizations - users will create projects directly
+
   if (authData.user) {
-    try {
-      console.log('🏢 DEV: Creating organization for user...')
-      
-      // Create organization
-      const { data: orgData, error: orgError } = await supabase
-        .from('organizations')
-        .insert({
-          name: formData.organizationName,
-          slug: formData.organizationName.toLowerCase().replace(/[^a-z0-9]/g, '-'),
-          type: formData.organizationType,
-          team_size: formData.teamSize,
-        })
-        .select()
-        .single()
-
-      if (orgError) {
-        console.error('❌ DEV: Organization creation error:', orgError)
-        return { error: 'Failed to create organization' }
-      }
-
-      console.log('✅ DEV: Organization created:', orgData.id)
-
-      // Create user record (don't update, create new)
-      const { error: userCreateError } = await supabase
-        .from('users')
-        .insert({ 
-          id: authData.user.id,
-          email: authData.user.email!,
-          name: `${formData.firstName} ${formData.lastName}`,
-          organization_id: orgData.id,
-          role: 'owner'
-        })
-
-      if (userCreateError) {
-        console.error('❌ DEV: User creation error:', userCreateError)
-        return { error: `Database error saving new user: ${userCreateError.message}` }
-      }
-
-      console.log('✅ DEV: User linked to organization successfully!')
-      console.log('🎉 DEV: Registration completed - redirecting to dashboard')
-
-      return { 
-        success: true, 
-        message: 'Account created successfully! Welcome to SocialFlow!',
-        redirectTo: '/dashboard'
-      }
-    } catch (error) {
-      console.error('❌ DEV: Signup process error:', error)
-      return { error: 'An unexpected error occurred during registration' }
+    console.log('🎉 DEV: Registration completed - user can now create projects!')
+    return { 
+      success: true, 
+      message: 'Account created successfully! Welcome to SocialFlow!',
+      redirectTo: '/dashboard'
     }
   }
 

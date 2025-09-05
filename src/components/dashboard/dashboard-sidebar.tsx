@@ -9,7 +9,7 @@ import {
   BarChart3, 
   Users, 
   Settings, 
-  Zap,
+  FolderOpen,
   Menu,
   X,
   ChevronLeft,
@@ -26,15 +26,14 @@ const navigation = [
     icon: Home,
   },
   {
+    name: 'Projects',
+    href: '/projects',
+    icon: FolderOpen,
+  },
+  {
     name: 'Content',
     href: '/content',
     icon: FileText,
-  },
-  {
-    name: 'Enhanced Test',
-    href: '/test-enhanced',
-    icon: Zap,
-    badge: 'New'
   },
   {
     name: 'Analytics', 

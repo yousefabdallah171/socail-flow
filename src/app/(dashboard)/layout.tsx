@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import { getUser } from '@/lib/auth/actions'
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar'
-import { DashboardHeaderEnhanced } from '@/components/dashboard/dashboard-header-enhanced'
-import { DashboardProvider } from '@/components/dashboard/dashboard-provider'
+import { ProjectHeader } from '@/components/dashboard/project-header'
+import { ProjectProvider } from '@/components/dashboard/project-provider'
 
 export default async function DashboardLayout({
   children,
@@ -24,16 +24,16 @@ export default async function DashboardLayout({
   }
 
   return (
-    <DashboardProvider initialUser={safeUser}>
+    <ProjectProvider initialUser={safeUser}>
       <div className="flex h-screen bg-background">
         <DashboardSidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
-          <DashboardHeaderEnhanced />
+          <ProjectHeader />
           <main className="flex-1 overflow-auto">
             {children}
           </main>
         </div>
       </div>
-    </DashboardProvider>
+    </ProjectProvider>
   )
 }
