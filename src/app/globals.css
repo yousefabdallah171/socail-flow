@@ -401,6 +401,31 @@
   min-width: 200px;
   text-align: center;
   margin: 0 auto;
+  width: 100%;
+  max-width: 400px;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .typewriter-container {
+    min-width: 250px;
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 768px) {
+  .typewriter-container {
+    min-width: 300px;
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .typewriter-container {
+    min-width: 350px;
+    max-width: 700px;
+  }
 }
 
 .typewriter-text {
@@ -432,6 +457,28 @@
   color: transparent;
   min-width: 200px;
   text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .typewriter-word {
+    min-width: 250px;
+  }
+}
+
+@media (min-width: 768px) {
+  .typewriter-word {
+    min-width: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .typewriter-word {
+    min-width: 350px;
+  }
 }
 
 .typewriter-word:nth-child(1) {
