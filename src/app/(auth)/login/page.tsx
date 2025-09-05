@@ -23,19 +23,18 @@ export default function LoginPage() {
     setIsLoading(true)
     
     try {
-      const { signIn } = await import('@/lib/auth/actions')
-      const result = await signIn({
-        email: formData.email,
-        password: formData.password,
-      })
+      const { simpleSignIn } = await import('@/lib/auth/simple-auth')
+      const result = await simpleSignIn(formData.email, formData.password)
 
-      if (result.error) {
-        alert(result.error)
+      if (result.success) {
+        // Success - redirect to dashboard
+        window.location.href = '/dashboard'
+      } else {
+        alert(result.error || 'Login failed')
       }
-      // Success case is handled by redirect in the action
     } catch (error) {
       console.error('Login error:', error)
-      alert('An unexpected error occurred. Please try again.')
+      alert('Authentication service error. Please check your internet connection and try again.')
     } finally {
       setIsLoading(false)
     }

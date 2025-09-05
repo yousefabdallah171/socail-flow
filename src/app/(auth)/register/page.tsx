@@ -48,8 +48,8 @@ export default function RegisterPage() {
     setIsLoading(true)
     
     try {
-      const { signUp } = await import('@/lib/auth/actions')
-      const result = await signUp({
+      const { simpleSignUp } = await import('@/lib/auth/simple-auth')
+      const result = await simpleSignUp({
         email: formData.email,
         password: formData.password,
         firstName: formData.firstName,
@@ -59,17 +59,16 @@ export default function RegisterPage() {
         teamSize: formData.teamSize,
       })
 
-      if (result.error) {
-        alert(result.error)
-      } else if (result.success) {
-        alert(result.message)
-        if (result.redirectTo) {
-          window.location.href = result.redirectTo
-        }
+      if (result.success) {
+        alert(result.message || 'Account created successfully!')
+        // Redirect to dashboard
+        window.location.href = '/dashboard'
+      } else {
+        alert(result.error || 'Registration failed')
       }
     } catch (error) {
       console.error('Registration error:', error)
-      alert('An unexpected error occurred. Please try again.')
+      alert('An unexpected error occurred during registration. Please try again.')
     } finally {
       setIsLoading(false)
     }

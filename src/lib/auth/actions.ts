@@ -68,18 +68,20 @@ export async function signUp(formData: {
 
       console.log('✅ DEV: Organization created:', orgData.id)
 
-      // Update user with organization
-      const { error: userUpdateError } = await supabase
+      // Create user record (don't update, create new)
+      const { error: userCreateError } = await supabase
         .from('users')
-        .update({ 
+        .insert({ 
+          id: authData.user.id,
+          email: authData.user.email!,
+          name: `${formData.firstName} ${formData.lastName}`,
           organization_id: orgData.id,
           role: 'owner'
         })
-        .eq('id', authData.user.id)
 
-      if (userUpdateError) {
-        console.error('❌ DEV: User update error:', userUpdateError)
-        return { error: 'Failed to link user to organization' }
+      if (userCreateError) {
+        console.error('❌ DEV: User creation error:', userCreateError)
+        return { error: `Database error saving new user: ${userCreateError.message}` }
       }
 
       console.log('✅ DEV: User linked to organization successfully!')
