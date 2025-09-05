@@ -22,7 +22,9 @@ export default function ForgotPasswordPage() {
       const result = await resetPassword(email)
 
       if (result.error) {
-        alert(result.error)
+        // Show error in a better way (you can enhance this with a toast or error state)
+        console.error('Password reset error:', result.error)
+        alert(result.error) // For now, keeping alert but you can improve this
       } else if (result.success) {
         setIsEmailSent(true)
       }

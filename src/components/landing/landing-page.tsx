@@ -34,7 +34,8 @@ import {
   Youtube,
   Music,
   Send,
-  Phone
+  Phone,
+  Clock
 } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -89,6 +90,7 @@ export function SocialFlowLandingPage() {
     contactType: ''
   })
   const [isSubmittingEnterprise, setIsSubmittingEnterprise] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   
   // Parallax effects - disabled for better UX
   // const heroY = useTransform(scrollY, [0, 500], [0, 150])
@@ -147,6 +149,9 @@ export function SocialFlowLandingPage() {
       setIsSubmittingEnterprise(false)
       window.open(whatsappUrl, '_blank')
       
+      // Show success message
+      setShowSuccessMessage(true)
+      
       // Reset form
       setEnterpriseForm({
         name: '',
@@ -156,8 +161,10 @@ export function SocialFlowLandingPage() {
         contactType: ''
       })
       
-      // Show success message
-      alert('Your enterprise inquiry has been sent! We\'ll contact you within 24 hours.')
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccessMessage(false)
+      }, 5000)
     }, 1500)
   }
 
@@ -1655,6 +1662,28 @@ export function SocialFlowLandingPage() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
+                      {/* Success Message */}
+                      {showSuccessMessage && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                          className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                              <CheckCircle className="h-5 w-5 text-green-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-green-800 dark:text-green-200">Message Sent Successfully!</h4>
+                              <p className="text-sm text-green-700 dark:text-green-300">
+                                Your inquiry has been sent via WhatsApp. We'll contact you within 24 hours.
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                      
                       <form onSubmit={handleEnterpriseSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
