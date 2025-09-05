@@ -27,11 +27,6 @@ const navigation = [
     icon: Home,
   },
   {
-    name: 'Projects',
-    href: '/projects',
-    icon: FolderOpen,
-  },
-  {
     name: 'Content',
     href: '/content',
     icon: FileText,
@@ -47,6 +42,11 @@ const navigation = [
     href: '/crm',
     icon: Users,
     badge: 'Soon'
+  },
+  {
+    name: 'Projects',
+    href: '/projects',
+    icon: FolderOpen,
   },
   {
     name: 'Settings',

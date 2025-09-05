@@ -5,6 +5,7 @@ import { Bell, Search, Settings, Plus, FolderOpen, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ProjectSwitcher } from './project-switcher'
 import { UserMenu } from './user-menu'
 import { useProjects } from './project-provider'
@@ -60,7 +61,7 @@ export function ProjectHeader() {
             </div>
           </div>
 
-          {/* Right: Notifications + Project Switcher + User Menu */}
+          {/* Right: Notifications + Theme Toggle + Project Switcher + User Menu */}
           <div className="flex items-center space-x-3">
             {/* Search (mobile) */}
             <Button variant="ghost" size="icon" className="sm:hidden">
@@ -78,6 +79,9 @@ export function ProjectHeader() {
                 )}
               </Button>
             </div>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Project Switcher */}
             <ProjectSwitcher

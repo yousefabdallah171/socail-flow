@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { LogOut, User, Settings, HelpCircle, Moon, Sun, Monitor } from 'lucide-react'
+import { LogOut, User, Settings, HelpCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -11,13 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/lib/auth/actions'
-import { useTheme } from 'next-themes'
 
 interface UserMenuProps {
   user: {
@@ -30,7 +26,6 @@ interface UserMenuProps {
 
 export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter()
-  const { theme, setTheme } = useTheme()
   const [isSigningOut, setIsSigningOut] = useState(false)
 
   const handleSignOut = async () => {
@@ -92,32 +87,6 @@ export function UserMenu({ user }: UserMenuProps) {
           <Settings className="mr-2 h-4 w-4" />
           Account Settings
         </DropdownMenuItem>
-
-        {/* Theme Submenu */}
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <div className="flex items-center">
-              {theme === 'light' && <Sun className="mr-2 h-4 w-4" />}
-              {theme === 'dark' && <Moon className="mr-2 h-4 w-4" />}
-              {theme === 'system' && <Monitor className="mr-2 h-4 w-4" />}
-              Theme
-            </div>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem onClick={() => setTheme('light')}>
-              <Sun className="mr-2 h-4 w-4" />
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme('dark')}>
-              <Moon className="mr-2 h-4 w-4" />
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme('system')}>
-              <Monitor className="mr-2 h-4 w-4" />
-              System
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
         
         <DropdownMenuItem>
           <HelpCircle className="mr-2 h-4 w-4" />
