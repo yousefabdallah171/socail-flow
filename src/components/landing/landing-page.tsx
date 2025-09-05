@@ -13,6 +13,7 @@ import {
   Users, 
   Calendar, 
   MessageSquare,
+  MessageCircle,
   Sparkles,
   Moon,
   Sun,
