@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { Save, Plus, Trash2, Settings2, Palette, Target, Hash, Globe, ExternalLink, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react'
+import { Save, Plus, Trash2, Settings2, Palette, Target, Hash, Globe, ExternalLink, RefreshCw, CheckCircle, AlertCircle, Calendar, DollarSign, Flag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { useProjects } from '@/components/dashboard/project-provider'
-import type { Project, SocialAccount } from '@/lib/projects/api'
+import type { EnhancedProject } from '@/lib/projects/enhanced-api'
 import { Facebook, Instagram, Twitter, Linkedin, Youtube, TrendingUp } from 'lucide-react'
 import { CredentialsManager } from '@/components/credentials/credentials-manager'
 import { N8NManager } from '@/components/credentials/n8n-manager'
@@ -44,8 +44,8 @@ export default function ProjectSettingsPage() {
   const projectId = params.projectId as string
   const { currentProject, refreshProjects } = useProjects()
   
-  const [project, setProject] = useState<Project | null>(null)
-  const [socialAccounts, setSocialAccounts] = useState<SocialAccount[]>([])
+  const [project, setProject] = useState<EnhancedProject | null>(null)
+  const [socialAccounts, setSocialAccounts] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   
@@ -60,7 +60,15 @@ export default function ProjectSettingsPage() {
     default_content_type: 'post' as const,
     keywords: [] as string[],
     hashtag_strategy: '',
-    website_url: ''
+    website_url: '',
+    logo_url: '',
+    status: 'active' as const,
+    priority: 'medium' as const,
+    start_date: '',
+    end_date: '',
+    budget_allocated: 0,
+    color_scheme: {} as any,
+    posting_schedule: {} as any
   })
 
   // Load project data
@@ -73,9 +81,9 @@ export default function ProjectSettingsPage() {
       setIsLoading(true)
       
       // Load project details
-      const { getProject, getProjectSocialAccounts } = await import('@/lib/projects/api')
+      const { getEnhancedProject, getSocialAccountsWithCredentials } = await import('@/lib/projects/enhanced-api')
       
-      const projectResult = await getProject(projectId)
+      const projectResult = await getEnhancedProject(projectId)
       if (projectResult.success && projectResult.project) {
         const proj = projectResult.project
         setProject(proj)
@@ -92,12 +100,20 @@ export default function ProjectSettingsPage() {
           default_content_type: proj.default_content_type,
           keywords: proj.keywords || [],
           hashtag_strategy: proj.hashtag_strategy || '',
-          website_url: proj.website_url || ''
+          website_url: proj.website_url || '',
+          logo_url: proj.logo_url || '',
+          status: proj.status,
+          priority: proj.priority,
+          start_date: proj.start_date || '',
+          end_date: proj.end_date || '',
+          budget_allocated: proj.budget_allocated || 0,
+          color_scheme: proj.color_scheme || {},
+          posting_schedule: proj.posting_schedule || {}
         })
       }
 
       // Load social accounts
-      const socialResult = await getProjectSocialAccounts(projectId)
+      const socialResult = await getSocialAccountsWithCredentials(projectId)
       if (socialResult.success && socialResult.accounts) {
         setSocialAccounts(socialResult.accounts)
       }
@@ -113,17 +129,28 @@ export default function ProjectSettingsPage() {
     try {
       setIsSaving(true)
       
-      const { updateProject } = await import('@/lib/projects/api')
+      const { updateEnhancedProject } = await import('@/lib/projects/enhanced-api')
       
-      const result = await updateProject(projectId, {
+      const result = await updateEnhancedProject(projectId, {
         name: formData.name,
         description: formData.description,
         industry: formData.industry,
         target_audience: formData.target_audience,
         brand_voice: formData.brand_voice,
+        brand_guidelines: formData.brand_guidelines,
         default_tone: formData.default_tone,
         default_content_type: formData.default_content_type,
-        keywords: formData.keywords
+        keywords: formData.keywords,
+        hashtag_strategy: formData.hashtag_strategy,
+        website_url: formData.website_url,
+        logo_url: formData.logo_url,
+        status: formData.status,
+        priority: formData.priority,
+        start_date: formData.start_date || undefined,
+        end_date: formData.end_date || undefined,
+        budget_allocated: formData.budget_allocated || undefined,
+        color_scheme: formData.color_scheme,
+        posting_schedule: formData.posting_schedule
       })
 
       if (result.success) {
@@ -142,9 +169,9 @@ export default function ProjectSettingsPage() {
 
   const handleAddSocialAccount = async (platform: string) => {
     try {
-      const { addSocialAccount } = await import('@/lib/projects/api')
+      const { addSocialAccountWithCredentials } = await import('@/lib/projects/enhanced-api')
       
-      const result = await addSocialAccount(projectId, platform as any)
+      const result = await addSocialAccountWithCredentials(projectId, platform)
       
       if (result.success) {
         toast.success(`${platform} account added successfully`)
@@ -231,9 +258,10 @@ export default function ProjectSettingsPage() {
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="brand">Brand & Content</TabsTrigger>
+          <TabsTrigger value="management">Management</TabsTrigger>
           <TabsTrigger value="social">Social Accounts</TabsTrigger>
           <TabsTrigger value="credentials">Credentials</TabsTrigger>
           <TabsTrigger value="automation">Automation</TabsTrigger>
@@ -294,15 +322,28 @@ export default function ProjectSettingsPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="website">Website URL</Label>
-                <Input
-                  id="website"
-                  type="url"
-                  value={formData.website_url}
-                  onChange={(e) => setFormData(prev => ({ ...prev, website_url: e.target.value }))}
-                  placeholder="https://example.com"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="website">Website URL</Label>
+                  <Input
+                    id="website"
+                    type="url"
+                    value={formData.website_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, website_url: e.target.value }))}
+                    placeholder="https://example.com"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="logo">Logo URL</Label>
+                  <Input
+                    id="logo"
+                    type="url"
+                    value={formData.logo_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, logo_url: e.target.value }))}
+                    placeholder="https://example.com/logo.png"
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -354,6 +395,17 @@ export default function ProjectSettingsPage() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="hashtagStrategy">Hashtag Strategy</Label>
+                <Textarea
+                  id="hashtagStrategy"
+                  rows={2}
+                  value={formData.hashtag_strategy}
+                  onChange={(e) => setFormData(prev => ({ ...prev, hashtag_strategy: e.target.value }))}
+                  placeholder="Your hashtag strategy and preferred tags..."
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Default Tone</Label>
@@ -392,6 +444,125 @@ export default function ProjectSettingsPage() {
                   </Select>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Project Management */}
+        <TabsContent value="management" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Flag className="mr-2 h-5 w-5" />
+                Project Status & Priority
+              </CardTitle>
+              <CardDescription>
+                Manage project timeline, budget, and status
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select 
+                    value={formData.status} 
+                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, status: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="paused">Paused</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="archived">Archived</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Priority</Label>
+                  <Select 
+                    value={formData.priority} 
+                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, priority: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="urgent">Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Calendar className="mr-2 h-5 w-5" />
+                Timeline & Budget
+              </CardTitle>
+              <CardDescription>
+                Set project dates and budget allocation
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="startDate">Start Date</Label>
+                  <Input
+                    id="startDate"
+                    type="date"
+                    value={formData.start_date}
+                    onChange={(e) => setFormData(prev => ({ ...prev, start_date: e.target.value }))}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="endDate">End Date</Label>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    value={formData.end_date}
+                    onChange={(e) => setFormData(prev => ({ ...prev, end_date: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="budget">Budget Allocated</Label>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="budget"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={formData.budget_allocated}
+                    onChange={(e) => setFormData(prev => ({ ...prev, budget_allocated: parseFloat(e.target.value) || 0 }))}
+                    className="pl-10"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+
+              {project && project.budget_spent !== undefined && (
+                <div className="p-4 bg-muted rounded-lg">
+                  <div className="flex justify-between text-sm">
+                    <span>Budget Spent:</span>
+                    <span>${project.budget_spent?.toFixed(2) || '0.00'}</span>
+                  </div>
+                  <div className="flex justify-between text-sm font-medium">
+                    <span>Remaining:</span>
+                    <span>${((formData.budget_allocated || 0) - (project.budget_spent || 0)).toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -528,7 +699,7 @@ export default function ProjectSettingsPage() {
             social_accounts={socialAccounts.map(account => ({
               id: account.id,
               platform: account.platform,
-              account_name: account.account_name || `${account.platform} Account`
+              account_name: account.account_name || account.username || `${account.platform} Account`
             }))}
           />
         </TabsContent>

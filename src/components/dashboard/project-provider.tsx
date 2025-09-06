@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import type { Project } from '@/lib/projects/api'
+import { createEnhancedProject, getEnhancedUserProjects } from '@/lib/projects/enhanced-api'
 
 interface User {
   id: string
@@ -60,10 +61,7 @@ export function ProjectProvider({ initialUser, children }: ProjectProviderProps)
     try {
       setLoading(true)
       
-      // Import the API functions dynamically to avoid server/client issues
-      const { getUserProjects } = await import('@/lib/projects/api')
-      
-      const result = await getUserProjects()
+      const result = await getEnhancedUserProjects()
       
       if (result.success && result.projects) {
         setProjects(result.projects)
@@ -98,9 +96,7 @@ export function ProjectProvider({ initialUser, children }: ProjectProviderProps)
 
   const createProject = async (data: any) => {
     try {
-      const { createProject: createProjectAPI } = await import('@/lib/projects/api')
-      
-      const result = await createProjectAPI(data)
+      const result = await createEnhancedProject(data)
       
       if (result.success && result.project) {
         // Refresh projects to include the new one
