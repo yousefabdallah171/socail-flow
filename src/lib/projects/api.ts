@@ -472,7 +472,7 @@ export async function removeSocialAccount(accountId: string): Promise<{ success:
       .eq('id', accountId)
       .single()
 
-    if (!account || account.projects.user_id !== user.id) {
+    if (!account || !account.projects?.some(p => p.user_id === user.id)) {
       return { success: false, error: 'Social account not found' }
     }
 

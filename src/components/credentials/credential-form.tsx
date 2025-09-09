@@ -12,13 +12,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { SocialPlatform, CredentialForm } from '@/types'
+import { SocialPlatform, type CredentialForm as CredentialFormType } from '@/types'
 import { PLATFORM_CREDENTIAL_CONFIGS, PLATFORM_INFO, validatePlatformCredentials } from '@/lib/credentials/platform-configs'
 
 // Validation schema
 const credentialFormSchema = z.object({
   account_name: z.string().min(1, 'Account name is required'),
-  credentials: z.record(z.string().optional()),
+  credentials: z.record(z.string(), z.string().optional()),
   expires_at: z.string().optional(),
 })
 
@@ -72,7 +72,9 @@ export function CredentialForm({
 
     try {
       // Validate platform credentials
-      const validation = validatePlatformCredentials(platform, data.credentials)
+      const validation = validatePlatformCredentials(platform, Object.fromEntries(
+        Object.entries(data.credentials).filter(([_, value]) => value !== undefined) as [string, string][]
+      ))
       
       if (!validation.isValid) {
         setValidationErrors([`Missing required fields: ${validation.missingFields.join(', ')}`])

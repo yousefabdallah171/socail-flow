@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { AutomationType, N8NWebhookForm } from '@/types'
+import { AutomationType, type N8NWebhookForm as N8NWebhookFormType } from '@/types'
 import { PLATFORM_INFO } from '@/lib/credentials/platform-configs'
 
 // Validation schema

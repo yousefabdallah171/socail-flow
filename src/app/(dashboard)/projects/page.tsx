@@ -277,7 +277,7 @@ export default function ProjectsPage() {
                 <SelectContent>
                   <SelectItem value="all">All Industries</SelectItem>
                   {uniqueIndustries.map((industry) => (
-                    <SelectItem key={industry} value={industry}>
+                    <SelectItem key={industry} value={industry!}>
                       {industry}
                     </SelectItem>
                   ))}
@@ -381,7 +381,14 @@ export default function ProjectsPage() {
         <ProjectSettingsDialog
           open={showSettingsDialog}
           onOpenChange={setShowSettingsDialog}
-          project={selectedProject}
+          project={selectedProject ? {
+            ...selectedProject,
+            organization_id: selectedProject.organization_id || '1',
+            default_tone: (selectedProject.default_tone || 'professional') as 'professional',
+            default_content_type: (selectedProject.default_content_type || 'post') as 'post',
+            priority: (selectedProject.priority || 'medium') as 'medium',
+            is_active: selectedProject.is_active ?? true
+          } : selectedProject}
           onProjectUpdated={handleProjectUpdated}
         />
       )}

@@ -10,11 +10,29 @@ const nextConfig = {
   images: {
     domains: [
       'localhost',
+      'socail-flow.rakmyat.com',
       'vsxxkbngvkewtenswgrw.supabase.co',
       'images.unsplash.com',
       'via.placeholder.com',
     ],
     formats: ['image/webp', 'image/avif'],
+  },
+  
+  // Production optimizations
+  output: 'standalone',
+  experimental: {
+    optimizeCss: true,
+  },
+  
+  // Webpack optimizations  
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
   },
   
   // Security headers

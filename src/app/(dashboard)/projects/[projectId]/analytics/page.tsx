@@ -47,7 +47,10 @@ export default function ProjectAnalyticsPage() {
         return
       }
 
-      setProject(foundProject)
+      setProject({
+        ...foundProject,
+        organization_id: mockOrgId
+      })
     } catch (err) {
       setError('Failed to load project')
     } finally {

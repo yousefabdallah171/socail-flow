@@ -617,6 +617,7 @@ export interface CredentialForm {
     webhook_secret?: string
     page_token?: string
     business_account_id?: string
+    client_key?: string
   }
   expires_at?: string
 }

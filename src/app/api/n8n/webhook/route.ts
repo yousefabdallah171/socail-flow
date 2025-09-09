@@ -20,7 +20,7 @@ const triggerWebhookSchema = z.object({
     content_id: z.string().uuid().optional(),
     scheduled_time: z.string().optional(),
     platforms: z.array(z.string()).optional(),
-    metadata: z.record(z.any()).optional(),
+    metadata: z.record(z.string(), z.any()).optional(),
   }),
 })
 
@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
+        { error: 'Invalid request data', details: error.issues },
         { status: 400 }
       )
     }
@@ -265,7 +265,7 @@ async function triggerWebhook(request: NextRequest, body: any) {
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid trigger data', details: error.errors },
+        { error: 'Invalid trigger data', details: error.issues },
         { status: 400 }
       )
     }

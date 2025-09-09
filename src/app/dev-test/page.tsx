@@ -40,10 +40,7 @@ export default function DevTestPage() {
       email: testEmail,
       password: testPassword,
       firstName: "Test",
-      lastName: "User",
-      organizationName: "Test Organization",
-      organizationType: "marketing-agency",
-      teamSize: "1"
+      lastName: "User"
     })
   }
 
